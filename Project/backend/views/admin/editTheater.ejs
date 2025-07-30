@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Theater</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 min-h-screen">
+  <nav class="bg-blue-600 p-4 text-white flex justify-between items-center">
+    <span class="font-bold text-xl">Admin Panel</span>
+    <a href="/admin/logout" class="bg-white text-blue-600 px-4 py-2 rounded hover:bg-gray-100 font-semibold">Logout</a>
+  </nav>
+  <main class="max-w-5xl mx-auto py-10">
+    <h2>Edit Theater</h2>
+    <% if (typeof error !== 'undefined') { %><div><%= error %></div><% } %>
+    <form method="POST" action="/admin/theaters/<%= theater._id %>/edit">
+      <input name="name" value="<%= theater.name %>" required><br>
+      <input name="location" value="<%= theater.location %>" required><br>
+      <input name="address" value="<%= theater.address %>" required><br>
+      <input name="city" value="<%= theater.city %>" required><br>
+      <input name="state" value="<%= theater.state %>" required><br>
+      <input name="pincode" value="<%= theater.pincode %>" required><br>
+      <input name="phone" value="<%= theater.phone %>" required><br>
+      <input name="totalScreens" value="<%= theater.totalScreens %>" type="number" required><br>
+      <button type="submit">Update Theater</button>
+    </form>
+  </main>
+</body>
+</html> 

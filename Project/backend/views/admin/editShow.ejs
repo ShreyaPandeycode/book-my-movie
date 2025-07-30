@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Show</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 min-h-screen">
+  <nav class="bg-blue-600 p-4 text-white flex justify-between items-center">
+    <span class="font-bold text-xl">Admin Panel</span>
+    <a href="/admin/logout" class="bg-white text-blue-600 px-4 py-2 rounded hover:bg-gray-100 font-semibold">Logout</a>
+  </nav>
+  <main class="max-w-5xl mx-auto py-10">
+    <h2>Edit Show</h2>
+    <% if (typeof error !== 'undefined') { %><div><%= error %></div><% } %>
+    <form method="POST" action="/admin/shows/<%= show._id %>/edit">
+      <label>Movie:</label>
+      <select name="movie" required>
+        <% movies.forEach(function(movie) { %>
+          <option value="<%= movie._id %>" <%= show.movie.equals(movie._id) ? 'selected' : '' %>><%= movie.title %></option>
+        <% }); %>
+      </select><br>
+      <label>Theater:</label>
+      <select name="theater" required>
+        <% theaters.forEach(function(theater) { %>
+          <option value="<%= theater._id %>" <%= show.theater.equals(theater._id) ? 'selected' : '' %>><%= theater.name %></option>
+        <% }); %>
+      </select><br>
+      <input name="screenNumber" value="<%= show.screenNumber %>" type="number" required><br>
+      <input name="date" value="<%= show.date.toISOString().slice(0,10) %>" type="date" required><br>
+      <input name="time" value="<%= show.time %>" type="time" required><br>
+      <input name="price" value="<%= show.price %>" type="number" required><br>
+      <input name="totalSeats" value="<%= show.totalSeats %>" type="number" required><br>
+      <button type="submit">Update Show</button>
+    </form>
+  </main>
+</body>
+</html> 

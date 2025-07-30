@@ -50,10 +50,13 @@ router.get('/:id', async (req, res) => {
   try {
     const show = await Show.findById(req.params.id)
       .populate('movie', 'title poster duration genre')
-      .populate('theater', 'name location address');
+      .populate('theater', 'name location address seatMatrix');
     
     if (show) {
-      res.json(show);
+      // Attach seatMatrix to the show response
+      const showObj = show.toObject();
+      showObj.seatMatrix = show.theater.seatMatrix;
+      res.json(showObj);
     } else {
       res.status(404).json({ message: 'Show not found' });
     }

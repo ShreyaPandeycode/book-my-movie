@@ -1,19 +1,25 @@
-<h1 class="text-3xl font-bold mb-8">Welcome, Admin!</h1>
-<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-  <a href="/admin/movies" class="block bg-white rounded-lg shadow p-6 hover:shadow-lg transition">
-    <h2 class="text-xl font-semibold mb-2">Manage Movies</h2>
-    <p class="text-gray-600">Add, edit, or delete movies</p>
-  </a>
-  <a href="/admin/theaters" class="block bg-white rounded-lg shadow p-6 hover:shadow-lg transition">
-    <h2 class="text-xl font-semibold mb-2">Manage Theaters</h2>
-    <p class="text-gray-600">Add, edit, or delete theaters</p>
-  </a>
-  <a href="/admin/shows" class="block bg-white rounded-lg shadow p-6 hover:shadow-lg transition">
-    <h2 class="text-xl font-semibold mb-2">Manage Shows</h2>
-    <p class="text-gray-600">Add, edit, or delete shows</p>
-  </a>
-  <a href="/admin/bookings" class="block bg-white rounded-lg shadow p-6 hover:shadow-lg transition">
-    <h2 class="text-xl font-semibold mb-2">View Bookings</h2>
-    <p class="text-gray-600">See all bookings</p>
-  </a>
-</div> 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 min-h-screen">
+  <nav class="bg-blue-600 p-4 text-white flex justify-between items-center">
+    <span class="font-bold text-xl">Admin Panel</span>
+    <a href="/admin/logout" class="bg-white text-blue-600 px-4 py-2 rounded hover:bg-gray-100 font-semibold">Logout</a>
+  </nav>
+  <main class="max-w-5xl mx-auto py-10">
+    <h2 class="text-2xl font-bold mb-6">Admin Dashboard</h2>
+    <ul class="space-y-4">
+      <li><a href="/admin/movies" class="text-blue-600 hover:underline">Manage Movies</a></li>
+      <li><a href="/admin/theaters" class="text-blue-600 hover:underline">Manage Theaters</a></li>
+      <li><a href="/admin/shows" class="text-blue-600 hover:underline">Manage Shows</a></li>
+      <li><a href="/admin/bookings" class="text-blue-600 hover:underline">View Bookings</a></li>
+      <li><a href="/admin/seat-approval" class="text-blue-600 hover:underline">Seat Booking Approval</a></li>
+    </ul>
+  </main>
+</body>
+</html> 

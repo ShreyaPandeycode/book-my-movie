@@ -23,12 +23,20 @@ interface Show {
     name: string;
     location: string;
     address: string;
+    seatMatrix?: Array<{ row: string; number: number; status: string }>;
   };
+  seatMatrix?: Array<{ row: string; number: number; status: string }>;
 }
 
 interface Seat {
   seatNumber: string;
   price: number;
+}
+
+interface SeatRender {
+  seatNumber: string;
+  isSelected: boolean;
+  isBooked: boolean;
 }
 
 const Booking = () => {
@@ -82,41 +90,46 @@ const Booking = () => {
 
     setBookingLoading(true);
     try {
-      const response = await axios.post('http://localhost:5000/api/bookings', {
+      // 1. Book seats
+      await axios.post('http://localhost:5000/api/bookings', {
         show: showId,
         seats: selectedSeats
       });
-
-      toast.success('Booking successful!');
+      // 2. Dummy payment
+      await axios.post('http://localhost:5000/api/bookings/payment/dummy');
+      toast.success('Booking & Payment successful!');
       navigate('/my-bookings');
-    } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Booking failed');
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        toast.error(error.response?.data?.message || 'Booking failed');
+      } else {
+        toast.error('Booking failed');
+      }
     } finally {
       setBookingLoading(false);
     }
   };
 
-  const generateSeats = () => {
-    if (!show) return [];
-    
-    const seats = [];
-    const rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
-    const cols = 10;
-    
-    for (let row = 0; row < rows.length; row++) {
-      for (let col = 1; col <= cols; col++) {
-        const seatNumber = `${rows[row]}${col}`;
+  const generateSeats = (): SeatRender[] => {
+    if (!show || !show.seatMatrix) return [];
+    // Group seats by row
+    const rows: { [row: string]: { number: number; status: string }[] } = {};
+    show.seatMatrix.forEach(seat => {
+      if (!rows[seat.row]) rows[seat.row] = [];
+      rows[seat.row].push({ number: seat.number, status: seat.status });
+    });
+    // Sort rows alphabetically and seats numerically
+    const sortedRows = Object.keys(rows).sort();
+    const seats: SeatRender[] = [];
+    sortedRows.forEach(row => {
+      rows[row].sort((a, b) => a.number - b.number);
+      rows[row].forEach(seat => {
+        const seatNumber = `${row}-${seat.number}`;
         const isSelected = selectedSeats.some(s => s.seatNumber === seatNumber);
-        const isBooked = col > show.availableSeats / rows.length; // Simple logic for demo
-        
-        seats.push({
-          seatNumber,
-          isSelected,
-          isBooked
-        });
-      }
-    }
-    
+        const isBooked = seat.status === 'booked';
+        seats.push({ seatNumber, isSelected, isBooked });
+      });
+    });
     return seats;
   };
 

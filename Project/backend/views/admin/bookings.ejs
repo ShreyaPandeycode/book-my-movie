@@ -1,33 +1,44 @@
-<h1 class="text-2xl font-bold mb-6">All Bookings</h1>
-<table class="min-w-full bg-white rounded shadow">
-  <thead>
-    <tr>
-      <th class="py-2 px-4 border-b">Booking ID</th>
-      <th class="py-2 px-4 border-b">User</th>
-      <th class="py-2 px-4 border-b">Movie</th>
-      <th class="py-2 px-4 border-b">Theater</th>
-      <th class="py-2 px-4 border-b">Show Date</th>
-      <th class="py-2 px-4 border-b">Seats</th>
-      <th class="py-2 px-4 border-b">Amount</th>
-      <th class="py-2 px-4 border-b">Status</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% if (bookings && bookings.length > 0) { %>
-      <% bookings.forEach(function(booking) { %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bookings</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 min-h-screen">
+  <nav class="bg-blue-600 p-4 text-white flex justify-between items-center">
+    <span class="font-bold text-xl">Admin Panel</span>
+    <a href="/admin/logout" class="bg-white text-blue-600 px-4 py-2 rounded hover:bg-gray-100 font-semibold">Logout</a>
+  </nav>
+  <main class="max-w-5xl mx-auto py-10">
+    <h2 class="text-2xl font-bold mb-6">Bookings</h2>
+    <table class="w-full bg-white rounded shadow mt-4">
+      <thead>
         <tr>
-          <td class="py-2 px-4 border-b"><%= booking.bookingId %></td>
-          <td class="py-2 px-4 border-b"><%= booking.user && booking.user.name %></td>
-          <td class="py-2 px-4 border-b"><%= booking.movie && booking.movie.title %></td>
-          <td class="py-2 px-4 border-b"><%= booking.theater && booking.theater.name %></td>
-          <td class="py-2 px-4 border-b"><%= booking.showDate ? booking.showDate.toISOString().slice(0,10) : '' %> <%= booking.showTime %></td>
-          <td class="py-2 px-4 border-b"><%= booking.seats && booking.seats.map(s => s.seatNumber).join(', ') %></td>
-          <td class="py-2 px-4 border-b">₹<%= booking.totalAmount %></td>
-          <td class="py-2 px-4 border-b"><%= booking.status %></td>
+          <th class="p-2">User</th>
+          <th class="p-2">Movie</th>
+          <th class="p-2">Theater</th>
+          <th class="p-2">Seats</th>
+          <th class="p-2">Status</th>
         </tr>
-      <% }) %>
-    <% } else { %>
-      <tr><td colspan="8" class="py-4 text-center text-gray-500">No bookings found.</td></tr>
-    <% } %>
-  </tbody>
-</table> 
+      </thead>
+      <tbody>
+        <% bookings.forEach(function(booking) { %>
+          <tr>
+            <td class="p-2"><%= booking.user ? booking.user.email : 'N/A' %></td>
+            <td class="p-2"><%= booking.movie ? booking.movie.title : 'N/A' %></td>
+            <td class="p-2"><%= booking.theater ? booking.theater.name : 'N/A' %></td>
+            <td class="p-2">
+              <% booking.seats.forEach(function(seat) { %>
+                <%= seat.seatNumber %> <br>
+              <% }); %>
+            </td>
+            <td class="p-2"><%= booking.status %></td>
+          </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </main>
+</body>
+</html> 

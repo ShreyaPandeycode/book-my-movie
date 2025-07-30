@@ -2,6 +2,7 @@ const express = require('express');
 const { body, validationResult } = require('express-validator');
 const Booking = require('../models/Booking');
 const Show = require('../models/Show');
+const Theater = require('../models/Theater');
 const { protect } = require('../middleware/auth');
 
 const router = express.Router();
@@ -76,6 +77,12 @@ router.post('/', protect, [
       return res.status(404).json({ message: 'Show not found' });
     }
 
+    // Get theater
+    const theater = await Theater.findById(show.theater);
+    if (!theater) {
+      return res.status(404).json({ message: 'Theater not found' });
+    }
+
     // Check if show is in the future
     const showDate = new Date(show.date);
     const today = new Date();
@@ -83,13 +90,25 @@ router.post('/', protect, [
       return res.status(400).json({ message: 'Cannot book for past shows' });
     }
 
-    // Check seat availability
-    if (show.availableSeats < seats.length) {
-      return res.status(400).json({ message: 'Not enough seats available' });
+    // Check seat availability in seatMatrix
+    for (const seat of seats) {
+      const [row, number] = seat.seatNumber.split('-');
+      const seatObj = theater.seatMatrix.find(s => s.row === row && s.number === parseInt(number));
+      if (!seatObj || seatObj.status === 'booked') {
+        return res.status(400).json({ message: `Seat ${seat.seatNumber} is already booked or invalid.` });
+      }
     }
 
     // Calculate total amount
     const totalAmount = seats.reduce((sum, seat) => sum + seat.price, 0);
+
+    // Mark seats as booked in seatMatrix
+    for (const seat of seats) {
+      const [row, number] = seat.seatNumber.split('-');
+      const seatObj = theater.seatMatrix.find(s => s.row === row && s.number === parseInt(number));
+      if (seatObj) seatObj.status = 'booked';
+    }
+    await theater.save();
 
     // Create booking
     const booking = await Booking.create({
@@ -100,7 +119,9 @@ router.post('/', protect, [
       seats,
       totalAmount,
       showDate: show.date,
-      showTime: show.time
+      showTime: show.time,
+      paymentStatus: 'completed', // Dummy payment always successful
+      status: 'confirmed'
     });
 
     // Update available seats
@@ -119,6 +140,12 @@ router.post('/', protect, [
     console.error(error);
     res.status(500).json({ message: 'Server error' });
   }
+});
+
+// Dummy payment endpoint
+router.post('/payment/dummy', protect, async (req, res) => {
+  // Always succeed
+  res.json({ success: true, message: 'Payment successful (dummy)' });
 });
 
 // @desc    Update booking status

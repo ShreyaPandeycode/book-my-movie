@@ -35,6 +35,13 @@ const theaterSchema = new mongoose.Schema({
     required: [true, 'Please provide number of screens'],
     min: 1
   },
+  seatMatrix: [
+    {
+      row: { type: String, required: true },
+      number: { type: Number, required: true },
+      status: { type: String, enum: ['available', 'booked'], default: 'available' }
+    }
+  ],
   amenities: [{
     type: String
   }],

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seat Booking Approval</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 min-h-screen">
+  <nav class="bg-blue-600 p-4 text-white flex justify-between items-center">
+    <span class="font-bold text-xl">Admin Panel</span>
+    <a href="/admin/logout" class="bg-white text-blue-600 px-4 py-2 rounded hover:bg-gray-100 font-semibold">Logout</a>
+  </nav>
+  <main class="max-w-5xl mx-auto py-10">
+    <h2 class="text-2xl font-bold mb-6">Seat Booking Approval</h2>
+    <table border="1" class="w-full bg-white rounded shadow mt-4">
+      <tr>
+        <th class="p-2">Booking ID</th>
+        <th class="p-2">User</th>
+        <th class="p-2">Show</th>
+        <th class="p-2">Seats</th>
+        <th class="p-2">Status</th>
+        <th class="p-2">Actions</th>
+      </tr>
+      <% bookings.forEach(function(booking) { %>
+        <tr>
+          <td class="p-2"><%= booking.bookingId %></td>
+          <td class="p-2"><%= booking.user ? booking.user.email : 'N/A' %></td>
+          <td class="p-2"><%= booking.show ? booking.show._id : 'N/A' %></td>
+          <td class="p-2">
+            <% booking.seats.forEach(function(seat) { %>
+              <%= seat.seatNumber %> <br>
+            <% }); %>
+          </td>
+          <td class="p-2"><%= booking.status %></td>
+          <td class="p-2">
+            <% if (booking.status === 'pending') { %>
+              <form method="POST" action="/admin/bookings/<%= booking._id %>/approve" style="display:inline;">
+                <button type="submit" class="bg-green-500 text-white px-2 py-1 rounded">Approve</button>
+              </form>
+              <form method="POST" action="/admin/bookings/<%= booking._id %>/reject" style="display:inline;">
+                <button type="submit" class="bg-red-500 text-white px-2 py-1 rounded">Reject</button>
+              </form>
+            <% } else { %>
+              <%= booking.status %>
+            <% } %>
+          </td>
+        </tr>
+      <% }); %>
+    </table>
+  </main>
+</body>
+</html> 
