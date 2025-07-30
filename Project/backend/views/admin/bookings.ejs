@@ -1,0 +1,33 @@
+<h1 class="text-2xl font-bold mb-6">All Bookings</h1>
+<table class="min-w-full bg-white rounded shadow">
+  <thead>
+    <tr>
+      <th class="py-2 px-4 border-b">Booking ID</th>
+      <th class="py-2 px-4 border-b">User</th>
+      <th class="py-2 px-4 border-b">Movie</th>
+      <th class="py-2 px-4 border-b">Theater</th>
+      <th class="py-2 px-4 border-b">Show Date</th>
+      <th class="py-2 px-4 border-b">Seats</th>
+      <th class="py-2 px-4 border-b">Amount</th>
+      <th class="py-2 px-4 border-b">Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if (bookings && bookings.length > 0) { %>
+      <% bookings.forEach(function(booking) { %>
+        <tr>
+          <td class="py-2 px-4 border-b"><%= booking.bookingId %></td>
+          <td class="py-2 px-4 border-b"><%= booking.user && booking.user.name %></td>
+          <td class="py-2 px-4 border-b"><%= booking.movie && booking.movie.title %></td>
+          <td class="py-2 px-4 border-b"><%= booking.theater && booking.theater.name %></td>
+          <td class="py-2 px-4 border-b"><%= booking.showDate ? booking.showDate.toISOString().slice(0,10) : '' %> <%= booking.showTime %></td>
+          <td class="py-2 px-4 border-b"><%= booking.seats && booking.seats.map(s => s.seatNumber).join(', ') %></td>
+          <td class="py-2 px-4 border-b">₹<%= booking.totalAmount %></td>
+          <td class="py-2 px-4 border-b"><%= booking.status %></td>
+        </tr>
+      <% }) %>
+    <% } else { %>
+      <tr><td colspan="8" class="py-4 text-center text-gray-500">No bookings found.</td></tr>
+    <% } %>
+  </tbody>
+</table> 
