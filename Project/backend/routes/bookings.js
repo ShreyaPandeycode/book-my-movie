@@ -17,7 +17,13 @@ router.get('/', protect, async (req, res) => {
       .populate('theater', 'name location')
       .populate('show', 'date time screenNumber')
       .sort({ bookingDate: -1 });
-    res.json(bookings);
+      const safeBookings = bookings.map(b => ({
+        ...b.toObject(),
+        movie: b.movie || { _id: 'deleted-movie', title: 'Deleted Movie', poster: '' },
+        theater: b.theater || { _id: 'deleted-theater', name: 'Unknown Theater', location: '' },
+        show: b.show || { _id: 'deleted-show', date: null, time: '', screenNumber: 0 },
+      }));
+    res.json(safeBookings);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error' });

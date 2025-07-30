@@ -126,10 +126,10 @@ const MyBookings = () => {
               <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                 {/* Movie Poster */}
                 <div className="md:col-span-1">
-                  {booking.movie.poster ? (
+                  {booking.movie?.poster ? (
                     <img
                       src={booking.movie.poster}
-                      alt={booking.movie.title}
+                      alt={booking.movie?.title || 'Movie'}
                       className="w-full rounded-lg shadow-md"
                     />
                   ) : (
@@ -137,6 +137,7 @@ const MyBookings = () => {
                       <span className="text-gray-500">No Image</span>
                     </div>
                   )}
+
                 </div>
 
                 {/* Booking Details */}

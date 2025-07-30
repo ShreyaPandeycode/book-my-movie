@@ -37,6 +37,7 @@ const showSchema = new mongoose.Schema({
   availableSeats: {
     type: Number,
     required: [true, 'Please provide available seats'],
+    default: 0,
     min: 0
   },
   isActive: {
